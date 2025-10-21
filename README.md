@@ -12,6 +12,15 @@ npm run dev
 The Vite dev server runs on port 5173 by default and the backend CORS is pre-configured for that origin.
 
 NOTE: If you're using Python 3.13, some older numpy versions (e.g. 1.27.x) are not available for that interpreter. The `backend/requirements.txt` pins a numpy version compatible with Python 3.13. If venv creation fails complaining about `numpy==1.27.5`, update the numpy pin to a 3.13-compatible release or use Python 3.11/3.12.
+
+Note about pandas on Windows
+If you need `pandas` for your notebook code, on some Windows + Python versions pip may attempt to build pandas from source which requires native build tools. For a smoother experience install pandas from conda/miniconda:
+
+```powershell
+conda install pandas
+```
+
+Alternatively, install pandas after creating the venv if your pip is able to install the wheel for your Python version.
 Fire Prediction — FastAPI backend + simple frontend
 
 Overview
@@ -39,3 +48,24 @@ Wiring in your notebook
 
 Notes
 - The current model is a placeholder heuristic so the app is runnable without the notebook. Replace it when you can move the notebook into the workspace.
+
+Training and model download
+1. Start the backend (venv activated):
+
+```powershell
+python -m uvicorn backend.app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+2. Train a linear model via API (this uses synthetic data by default):
+
+```powershell
+# POST to /train (default 30 days). Use a tool like httpie, curl, or PowerShell Invoke-RestMethod
+Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/train?days=30
+```
+
+3. Check model status or download:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:8000/model/status
+Invoke-RestMethod http://127.0.0.1:8000/model/download -OutFile linreg.joblib
+```

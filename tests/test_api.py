@@ -26,3 +26,12 @@ def test_history():
     data = r.json()
     assert 'history' in data
     assert len(data['history']) == 5
+
+
+def test_train():
+    r = client.post('/train?days=10')
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get('status') == 'ok'
+    res = data.get('result', {})
+    assert res.get('trained') is True

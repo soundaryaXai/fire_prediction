@@ -1,8 +1,8 @@
-fastapi==0.95.2
-uvicorn[standard]==0.22.0
-pydantic==1.10.12
-numpy==2.3.4
-pandas==2.2.2
-scikit-learn==1.5.3
-pytest==7.4.2
-httpx==0.27.0
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.6.0
+numpy>=1.26.0
+# pandas removed due to build issues on some Windows/Python combinations; install via conda if needed
+# scikit-learn removed to avoid platform wheel issues; using numpy-based regression instead
+pytest>=7.4.2
+httpx>=0.27.0

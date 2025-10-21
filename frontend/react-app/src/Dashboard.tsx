@@ -45,6 +45,7 @@ export default function Dashboard() {
   const temps = history.map(h => h.temperature)
   const humidity = history.map(h => h.humidity)
 
+  const etas = history.map(h => h.prediction?.eta_minutes ?? h.eta_minutes ?? 0)
   const lineData = {
     labels,
     datasets: [
@@ -53,6 +54,12 @@ export default function Dashboard() {
         data: scores,
         borderColor: 'rgb(255,99,132)',
         backgroundColor: 'rgba(255,99,132,0.2)'
+      },
+      {
+        label: 'ETA (min)',
+        data: etas,
+        borderColor: 'rgb(54,162,235)',
+        backgroundColor: 'rgba(54,162,235,0.2)'
       }
     ]
   }

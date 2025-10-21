@@ -67,6 +67,7 @@ export default function App() {
             <div>
               <div>Risk score: <strong>{result.risk_score}</strong></div>
               <div>Level: <strong>{result.risk_level}</strong></div>
+              <div>ETA (min): <strong>{result.eta_minutes}</strong></div>
             </div>
           )
         ) : (
