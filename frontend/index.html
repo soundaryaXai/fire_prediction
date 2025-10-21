@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fire Risk Prediction</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 2rem; }
+    label { display:block; margin-top: 0.5rem }
+    input[type=number] { width: 6rem }
+    #result { margin-top: 1rem; padding: 1rem; border: 1px solid #ddd; width: 380px }
+    .high { color: #b30; font-weight: bold }
+    .medium { color: #d47a00 }
+    .low { color: #2a8f2a }
+  </style>
+</head>
+<body>
+  <h1>Fire Risk Prediction</h1>
+  <p>Enter simple environmental features and click <strong>Predict</strong>.</p>
+
+  <label>Temperature (°C)
+    <input id="temperature" type="number" step="0.1" value="30">
+  </label>
+  <label>Humidity (%)
+    <input id="humidity" type="number" step="0.1" value="20">
+  </label>
+  <label>Wind speed (km/h)
+    <input id="wind" type="number" step="0.1" value="10">
+  </label>
+
+  <button id="predictBtn">Predict</button>
+
+  <div id="result">No prediction yet.</div>
+
+  <script>
+    const apiBase = 'http://localhost:8000';
+    document.getElementById('predictBtn').addEventListener('click', async () => {
+      const temperature = parseFloat(document.getElementById('temperature').value || 0);
+      const humidity = parseFloat(document.getElementById('humidity').value || 0);
+      const wind = parseFloat(document.getElementById('wind').value || 0);
+
+      document.getElementById('result').textContent = 'Loading...';
+
+      try {
+        const resp = await fetch(apiBase + '/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ features: { temperature, humidity, wind } })
+        });
+        if (!resp.ok) throw new Error('Server returned ' + resp.status);
+        const data = await resp.json();
+        const p = data.prediction || {};
+        const score = p.risk_score ?? 'n/a';
+        const level = p.risk_level ?? 'n/a';
+        const el = document.getElementById('result');
+        el.innerHTML = `<div>Risk score: <strong>${score}</strong></div><div>Level: <span class="${level}">${level}</span></div>`;
+      } catch (err) {
+        document.getElementById('result').textContent = 'Error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>

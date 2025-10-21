@@ -1,0 +1,9 @@
+{
+  "name": "fire-prediction",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start:api": "uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000",
+  "dev": "cd frontend/react-app && npx vite"
+  }
+}
